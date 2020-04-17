@@ -1,7 +1,7 @@
 var aws = require('aws-sdk');
 
 const dynamoDBClient = new aws.DynamoDB.DocumentClient({region: "us-east-1"});
-const tableName = 'tgr-ats_dev_Use-Case';
+const tableName = 'SA-testLabs';
 
 function getDataQuery(id, key) {
     let paramsQuery = {
@@ -197,8 +197,31 @@ function updateData(id){
         console.log(data.Attributes);
         return true;
     });
-
 };
+
+function createData(){
+    let paramsCreate = {
+        TableName: tableName,
+        Item: {
+            "id": 1587141553860,
+            "responsable": 'sergioAbarca_',
+            "descripcion": 'Holhoaoaoalkla'
+        }
+    };
+
+    dynamoDBClient.put(paramsCreate, (err, data) => {
+        if( err ){
+            console.error( err );
+            return false;   
+        }
+
+        console.log(data);
+        return true;
+    });
+
+
+}
+
 
 // putData();
 // getData(1585682453203);
@@ -208,3 +231,4 @@ function updateData(id){
 // updateData(1585573508119)
 // getDataQuery(1586887842668);
 // getDataID(1586889205749);
+createData();
