@@ -3,7 +3,7 @@ var aws = require('aws-sdk');
 const dynamoDBClient = new aws.DynamoDB.DocumentClient({region: "us-east-1"});
 const tableName = 'tgr-ats_dev_Use-Case';
 
-function getDataQuery(id) {
+function getDataQuery(id, key) {
     let paramsQuery = {
         TableName: tableName,
         IndexName: "id_project",
@@ -13,30 +13,9 @@ function getDataQuery(id) {
         ":show": "true"
         },
         Limit: 4
-    }
-
-    dynamoDBClient.query(paramsQuery, (err, data) => {
-        if(err){
-            console.log(err);
-            return false
-        }
-
-        console.log(data);
-        return getDataQueryWithIndex(id, data.LastEvaluatedKey);
-    });
-}
-
-const getDataQueryWithIndex = (id, index) => {
-    let paramsQuery = {
-        TableName: tableName,
-        IndexName: "id_project",
-        KeyConditionExpression: "projectID = :projectID and available = :show",
-        ExpressionAttributeValues: {
-        ":projectID": id,
-        ":show": "true"
-        },
-        Limit: 4,
-        ExclusiveStartKey: index
+    };
+    if(key){
+        paramsQuery.ExclusiveStartKey = key
     }
 
     dynamoDBClient.query(paramsQuery, (err, data) => {
@@ -50,7 +29,7 @@ const getDataQueryWithIndex = (id, index) => {
         }
 
         console.log(data);
-        return getDataQueryWithIndex(id, data.LastEvaluatedKey);
+        return getDataQuery(id, data.LastEvaluatedKey);
     });
 }
 
@@ -228,4 +207,4 @@ function updateData(id){
 // deleteData(1585571284161);
 // updateData(1585573508119)
 // getDataQuery(1586887842668);
-getDataID(1586889205749);
+// getDataID(1586889205749);
