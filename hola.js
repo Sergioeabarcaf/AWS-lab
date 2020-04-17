@@ -1,7 +1,7 @@
 var aws = require('aws-sdk');
 
 const dynamoDBClient = new aws.DynamoDB.DocumentClient({region: "us-east-1"});
-const tableName = 'SA_tgr-ats_dev_Use-Case';
+const tableName = 'tgr-ats_dev_Use-Case';
 
 function getDataQuery(id) {
     let paramsQuery = {
@@ -11,6 +11,55 @@ function getDataQuery(id) {
         ExpressionAttributeValues: {
         ":projectID": id,
         ":show": "true"
+        },
+        Limit: 4
+    }
+
+    dynamoDBClient.query(paramsQuery, (err, data) => {
+        if(err){
+            console.log(err);
+            return false
+        }
+
+        console.log(data);
+        return getDataQueryWithIndex(id, data.LastEvaluatedKey);
+    });
+}
+
+const getDataQueryWithIndex = (id, index) => {
+    let paramsQuery = {
+        TableName: tableName,
+        IndexName: "id_project",
+        KeyConditionExpression: "projectID = :projectID and available = :show",
+        ExpressionAttributeValues: {
+        ":projectID": id,
+        ":show": "true"
+        },
+        Limit: 4,
+        ExclusiveStartKey: index
+    }
+
+    dynamoDBClient.query(paramsQuery, (err, data) => {
+        if(err){
+            console.log(err);
+            return false
+        }
+
+        if(!data.LastEvaluatedKey){
+            return true;
+        }
+
+        console.log(data);
+        return getDataQueryWithIndex(id, data.LastEvaluatedKey);
+    });
+}
+
+function getDataID(id) {
+    let paramsQuery = {
+        TableName: tableName,
+        KeyConditionExpression: "useCaseID = :useCase",
+        ExpressionAttributeValues: {
+        ":useCase": id,
         }
     }
 
@@ -21,7 +70,7 @@ function getDataQuery(id) {
         }
 
         console.log(data);
-        return true
+        return true;
     });
 }
 
@@ -74,7 +123,6 @@ async function getData(id) {
         return true;
     });
 };
-
 
 // Get data in range with keys
 async function getDataRange(){
@@ -179,4 +227,5 @@ function updateData(id){
 // scanData();
 // deleteData(1585571284161);
 // updateData(1585573508119)
-getDataQuery(123);
+// getDataQuery(1586887842668);
+getDataID(1586889205749);
