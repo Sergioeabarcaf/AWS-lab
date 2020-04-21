@@ -36,9 +36,9 @@ function getDataQuery(id, key) {
 function getDataID(id) {
     let paramsQuery = {
         TableName: tableName,
-        KeyConditionExpression: "useCaseID = :useCase",
+        KeyConditionExpression: "id = :id",
         ExpressionAttributeValues: {
-        ":useCase": id,
+        ":id": id,
         }
     }
 
@@ -173,17 +173,12 @@ function updateData(id){
     let paramsUpdate = {
         TableName: tableName,
         Key: {
-            "id": id,
-            "featureID": id
+            "id": id
         },
-        UpdateExpression: "set proyecto = :proyecto, nombre = :nombre, descripcion = :descripcion, responsable = :responsable, urlS3 = :urlS3, estado = :estado",
+        UpdateExpression: "set responsable = :responsable, descripcion = :descripcion",
         ExpressionAttributeValues:{
-            ":proyecto": "newProject", 
-            ":nombre": "nameCompany", 
             ":descripcion": "testing", 
-            ":responsable": "Oliver Prada", 
-            ":urlS3": "www.algoenS3.com", 
-            ":estado": "Ejecutando"
+            ":responsable": "SergioAbarcaFlores"
         },
         ReturnValues:"UPDATED_NEW"
     };
@@ -203,7 +198,7 @@ function createData(){
     let paramsCreate = {
         TableName: tableName,
         Item: {
-            "id": 1587141553860,
+            "id": new Date().getTime(),
             "responsable": 'sergioAbarca_',
             "descripcion": 'Holhoaoaoalkla'
         }
@@ -228,7 +223,7 @@ function createData(){
 // getDataRange();
 // scanData();
 // deleteData(1585571284161);
-// updateData(1585573508119)
+// updateData(1587141553860)
 // getDataQuery(1586887842668);
-// getDataID(1586889205749);
-createData();
+getDataID(1587141553860);
+// createData();
