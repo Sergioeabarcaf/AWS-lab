@@ -217,6 +217,32 @@ function createData(){
 
 }
 
+// Update data for idProject in table
+function updateData(id){
+    let paramsUpdate = {
+        TableName: tableName,
+        Key: {
+            "id": id
+        },
+        UpdateExpression: "set responsable = :responsable, descripcion = :descripcion",
+        ExpressionAttributeValues:{
+            ":descripcion": "testing", 
+            ":responsable": "SergioAbarcaFlores"
+        },
+        ReturnValues:"UPDATED_NEW"
+    };
+
+    dynamoDBClient.update(paramsUpdate, (err, data) => {
+        if( err ){
+            console.error( err );
+            return false;   
+        }
+
+        console.log(data.Attributes);
+        return true;
+    });
+};
+
 
 // putData();
 // getData(1585682453203);
