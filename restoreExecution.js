@@ -8,10 +8,16 @@ async function putData(data) {
     let params = {
         TableName: tableName,
         Item: {
-            responsable: data.responsable,
+            resultExecution: data.resultExecution ? JSON.stringify(data.resultExecution) : '-',
             timestampStart: data.timestampStart,
             executionID: data.executionID,
-            useCaseID: data.useCaseID
+            testCaseID: data.testCaseID ? Number(data.testCaseID) : 1,
+            createdBy: data.createdBy ? JSON.stringify(data.createdBy) : '-',
+            tags: data.tags ? JSON.stringify(data.tags) : '[]',
+            timestampEnd: data.timestampEnd ? Number(data.timestampEnd) : 2,
+            applicationID: data.applicationID ? Number(data.applicationID) : 3,
+            state: data.state ? JSON.stringify(data.state) : '-',
+            available: 'true'
         }
     };
 

@@ -2,16 +2,23 @@ var aws = require('aws-sdk');
 var fs = require('fs');
 
 const dynamoDBClient = new aws.DynamoDB.DocumentClient({region: "us-east-1"});
-const tableName = 'tgr-ats_dev_Project';
+const tableName = 'tgr-ats_dev_Test_Case';
 
 async function putData(data) {
     let params = {
         TableName: tableName,
         Item: {
-            projectID: data.projectID,
-            projectDescription: data.projectDescription,
+            testCaseName: data.testCaseName,
+            applicationID: data.applicationID,
             available: data.available,
-            projectName: data.projectName
+            updateTime: data.updateTime,
+            updateBy: data.updateBy,
+            createdTime: data.createdTime,
+            createdBy: data.createdBy,
+            testCaseID: data.testCaseID,
+            testCaseDescription: data.testCaseDescription,
+            testCaseCode: data.testCaseCode,
+            tags: data.tags
         }
     };
 
@@ -31,8 +38,8 @@ restoreItem = () => {
 
         if(data) {
             const dataJSON = JSON.parse(data);
-            for( let project of dataJSON.Items){
-                putData(project);
+            for( let useCase of dataJSON.Items){
+                putData(useCase);
             }
         }
     });
