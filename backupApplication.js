@@ -2,7 +2,7 @@ var aws = require('aws-sdk');
 var fs = require('fs');
 
 const dynamoDBClient = new aws.DynamoDB.DocumentClient({region: "us-east-1"});
-const tableName = 'tgr-ats_dev_Project';
+const tableName = 'tgr-ats_dev_Application';
 
 scanData = () => {
     let paramsScan = {
